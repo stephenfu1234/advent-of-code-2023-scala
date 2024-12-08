@@ -1,0 +1,31 @@
+https://medium.com/@dhavalkumar741/how-to-convert-almost-all-recursive-dp-to-iterative-dp-babaaff0363d
+
+Painting the Walls
+As the problems states, we have a list of walls to be painted, and for each wall, we know the cost and time it takes to paint it. We have two painters available: one who charges money for painting each wall based on the cost and time, and another who paints walls for free but takes 1 unit of time to do so.
+The catch is that the free painter can only work if the paid painter is already occupied with another wall.
+Our goal is to determine the minimum amount of money required to paint all the walls.
+The problem is not that relevant to the technique. As this can be applied to almost any problem. What’s relevant here are the steps or things to keep in mind while preforming the conversion and applying the optimization.
+
+Approach
+This problem is a variation of 0/1 Knapsack Problem in which we can define our states as:
+
+// Recurrence Relation
+f(index, total_time, took) = min(
+  f(index + 1, min(total_time + 1 + time[i], n), 1) + cost[i],
+  f(index + 1, total_time, 0)
+)
+
+// Base Case
+if (total_time == n) f(index, total_time, took) = 0
+if (i == n and total_time != n) f(index, total_time, took) = INF
+
+index: Represents the index of the current wall we are considering. It ranges from 0 to n-1, where n is the total number of walls.
+total_time: Indicates the total time taken to paint the walls up to the current index. This value is updated as we progress through the walls.
+took: Denotes whether the paid painter has been occupied (1) or not (0) for the current wall.
+
+The recurrence relation computes the minimum cost at each step by considering two scenarios:
+Paying the painter for the wall: This option takes into account the cost and time required to paint the wall. By paying the painter, we get the time needed to paint the wall, which can then be used to paint subsequent walls.
+Not paying the painter for the wall: This option assumes that previous walls have given us extra time or we will get extra time for another wall with paid painter, which can be used to paint the current wall without incurring any additional cost.
+The base cases handle the termination conditions:
+If the total time taken equals the total number of walls, the cost is 0 since all walls have been painted within the given time.
+If the index reaches the total number of walls but the total time taken does not equal the total number of walls, it signifies an invalid solution, so we assign a value of infinity (INF) to indicate that.
